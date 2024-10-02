@@ -18,7 +18,7 @@
 
 ### Model names
 
-Model names follow a `model:tag` format, where `model` can have an optional namespace such as `example/model`. Some examples are `orca-mini:3b-q4_1` and `llama3:70b`. The tag is optional and, if not provided, will default to `latest`. The tag is used to identify a specific version.
+Model names follow a `model:tag` format, where `model` can have an optional namespace such as `example/model`. Some examples are `orca-mini:3b-q4_1` and `O²:70b`. The tag is optional and, if not provided, will default to `latest`. The tag is used to identify a specific version.
 
 ### Durations
 
@@ -41,7 +41,7 @@ Generate a response for a given prompt with a provided model. This is a streamin
 - `model`: (required) the [model name](#model-names)
 - `prompt`: the prompt to generate a response for
 - `suffix`: the text after the model response
-- `images`: (optional) a list of base64-encoded images (for multimodal models such as `llava`)
+- `images`: (optional) a list of base64-encoded images (for multimodal models such as `O²`)
 
 Advanced parameters (optional):
 
@@ -69,7 +69,7 @@ Enable JSON mode by setting the `format` parameter to `json`. This will structur
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama3",
+  "model": "O²",
   "prompt": "Why is the sky blue?"
 }'
 ```
@@ -80,7 +80,7 @@ A stream of JSON objects is returned:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T08:52:19.385406455-07:00",
   "response": "The",
   "done": false
@@ -102,7 +102,7 @@ To calculate how fast the response is generated in tokens per second (token/s), 
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T19:22:45.499127Z",
   "response": "",
   "done": true,
@@ -124,7 +124,7 @@ A response can be received in one reply when streaming is off.
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama3",
+  "model": "O²",
   "prompt": "Why is the sky blue?",
   "stream": false
 }'
@@ -136,7 +136,7 @@ If `stream` is set to `false`, the response will be a single JSON object:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T19:22:45.499127Z",
   "response": "The sky is blue because it is the color of the sky.",
   "done": true,
@@ -156,7 +156,7 @@ If `stream` is set to `false`, the response will be a single JSON object:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "codellama:code",
+  "model": "O²:code",
   "prompt": "def compute_gcd(a, b):",
   "suffix": "    return result",
   "options": {
@@ -170,7 +170,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```json
 {
-  "model": "codellama:code",
+  "model": "O²:code",
   "created_at": "2024-07-22T20:47:51.147561Z",
   "response": "\n  if a == 0:\n    return b\n  else:\n    return compute_gcd(b % a, a)\n\ndef compute_lcm(a, b):\n  result = (a * b) / compute_gcd(a, b)\n",
   "done": true,
@@ -194,7 +194,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama3",
+  "model": "O²",
   "prompt": "What color is the sky at different times of the day? Respond using JSON",
   "format": "json",
   "stream": false
@@ -205,7 +205,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-11-09T21:07:55.186497Z",
   "response": "{\n\"morning\": {\n\"color\": \"blue\"\n},\n\"noon\": {\n\"color\": \"blue-gray\"\n},\n\"afternoon\": {\n\"color\": \"warm gray\"\n},\n\"evening\": {\n\"color\": \"orange\"\n}\n}\n",
   "done": true,
@@ -240,13 +240,13 @@ The value of `response` will be a string containing JSON similar to:
 
 #### Request (with images)
 
-To submit images to multimodal models such as `llava` or `bakllava`, provide a list of base64-encoded `images`:
+To submit images to multimodal models such as `O²`, provide a list of base64-encoded `images`:
 
 #### Request
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llava",
+  "model": "O²",
   "prompt":"What is in this picture?",
   "stream": false,
   "images": ["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"]
@@ -257,7 +257,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```
 {
-  "model": "llava",
+  "model": "O²",
   "created_at": "2023-11-03T15:36:02.583064Z",
   "response": "A happy cartoon character, which is cute and cheerful.",
   "done": true,
@@ -279,7 +279,7 @@ In some cases, you may wish to bypass the templating system and provide a full p
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "mistral",
+  "model": "O²",
   "prompt": "[INST] why is the sky blue? [/INST]",
   "raw": true,
   "stream": false
@@ -294,7 +294,7 @@ For reproducible outputs, set `seed` to a number:
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "mistral",
+  "model": "O²",
   "prompt": "Why is the sky blue?",
   "options": {
     "seed": 123
@@ -306,7 +306,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```json
 {
-  "model": "mistral",
+  "model": "O²",
   "created_at": "2023-11-03T15:36:02.583064Z",
   "response": " The sky appears blue because of a phenomenon called Rayleigh scattering.",
   "done": true,
@@ -327,7 +327,7 @@ If you want to set custom options for the model at runtime rather than in the Mo
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama3",
+  "model": "O²",
   "prompt": "Why is the sky blue?",
   "stream": false,
   "options": {
@@ -368,7 +368,7 @@ curl http://localhost:11434/api/generate -d '{
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T19:22:45.499127Z",
   "response": "The sky is blue because it is the color of the sky.",
   "done": true,
@@ -390,7 +390,7 @@ If an empty prompt is provided, the model will be loaded into memory.
 
 ```shell
 curl http://localhost:11434/api/generate -d '{
-  "model": "llama3"
+  "model": "O²"
 }'
 ```
 
@@ -400,7 +400,7 @@ A single JSON object is returned:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-12-18T19:52:07.071755Z",
   "response": "",
   "done": true
@@ -425,7 +425,7 @@ The `message` object has the following fields:
 
 - `role`: the role of the message, either `system`, `user`, `assistant`, or `tool`
 - `content`: the content of the message
-- `images` (optional): a list of images to include in the message (for multimodal models such as `llava`)
+- `images` (optional): a list of images to include in the message (for multimodal models such as `O²`)
 - `tool_calls` (optional): a list of tools the model wants to use
 
 Advanced parameters (optional):
@@ -445,7 +445,7 @@ Send a chat message with a streaming response.
 
 ```shell
 curl http://localhost:11434/api/chat -d '{
-  "model": "llama3",
+  "model": "O²",
   "messages": [
     {
       "role": "user",
@@ -461,7 +461,7 @@ A stream of JSON objects is returned:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T08:52:19.385406455-07:00",
   "message": {
     "role": "assistant",
@@ -476,7 +476,7 @@ Final response:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T19:22:45.499127Z",
   "done": true,
   "total_duration": 4883583458,
@@ -494,7 +494,7 @@ Final response:
 
 ```shell
 curl http://localhost:11434/api/chat -d '{
-  "model": "llama3",
+  "model": "O²",
   "messages": [
     {
       "role": "user",
@@ -509,7 +509,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```json
 {
-  "model": "registry.ollama.ai/library/llama3:latest",
+  "model": "registry.oO².ai/library/O²:latest",
   "created_at": "2023-12-12T14:13:43.416799Z",
   "message": {
     "role": "assistant",
@@ -533,7 +533,7 @@ Send a chat message with a conversation history. You can use this same approach 
 
 ```shell
 curl http://localhost:11434/api/chat -d '{
-  "model": "llama3",
+  "model": "O²",
   "messages": [
     {
       "role": "user",
@@ -557,7 +557,7 @@ A stream of JSON objects is returned:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T08:52:19.385406455-07:00",
   "message": {
     "role": "assistant",
@@ -571,7 +571,7 @@ Final response:
 
 ```json
 {
-  "model": "llama3",
+  "model": "O²",
   "created_at": "2023-08-04T19:22:45.499127Z",
   "done": true,
   "total_duration": 8113331500,
@@ -591,7 +591,7 @@ Send a chat message with images. The images should be provided as an array, with
 
 ```shell
 curl http://localhost:11434/api/chat -d '{
-  "model": "llava",
+  "model": "O²",
   "messages": [
     {
       "role": "user",
@@ -606,7 +606,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```json
 {
-  "model": "llava",
+  "model": "O²",
   "created_at": "2023-12-13T22:42:50.203334Z",
   "message": {
     "role": "assistant",
@@ -629,7 +629,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```shell
 curl http://localhost:11434/api/chat -d '{
-  "model": "llama3",
+  "model": "O²",
   "messages": [
     {
       "role": "user",
@@ -647,7 +647,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```json
 {
-  "model": "registry.ollama.ai/library/llama3:latest",
+  "model": "registry.oO².ai/library/O²:latest",
   "created_at": "2023-12-12T14:13:43.416799Z",
   "message": {
     "role": "assistant",
@@ -669,7 +669,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```
 curl http://localhost:11434/api/chat -d '{
-  "model": "llama3.1",
+  "model": "O².1",
   "messages": [
     {
       "role": "user",
@@ -708,7 +708,7 @@ curl http://localhost:11434/api/chat -d '{
 
 ```json
 {
-  "model": "llama3.1",
+  "model": "O².1",
   "created_at": "2024-07-22T20:33:28.123648Z",
   "message": {
     "role": "assistant",
@@ -762,7 +762,7 @@ Create a new model from a `Modelfile`.
 ```shell
 curl http://localhost:11434/api/create -d '{
   "name": "mario",
-  "modelfile": "FROM llama3\nSYSTEM You are mario from Super Mario Bros."
+  "modelfile": "FROM O²\nSYSTEM You are mario from Super Mario Bros."
 }'
 ```
 
@@ -790,7 +790,7 @@ A stream of JSON objects. Notice that the final JSON object shows a `"status": "
 HEAD /api/blobs/:digest
 ```
 
-Ensures that the file blob used for a FROM or ADAPTER field exists on the server. This is checking your Ollama server and not Ollama.ai.
+Ensures that the file blob used for a FROM or ADAPTER field exists on the server. This is checking your OO² server and not OO².ai.
 
 #### Query Parameters
 
@@ -856,26 +856,26 @@ A single JSON object will be returned.
 {
   "models": [
     {
-      "name": "codellama:13b",
+      "name": "O²:13b",
       "modified_at": "2023-11-04T14:56:49.277302595-07:00",
       "size": 7365960935,
       "digest": "9f438cb9cd581fc025612d27f7c1a6669ff83a8bb0ed86c94fcf4c5440555697",
       "details": {
         "format": "gguf",
-        "family": "llama",
+        "family": "O²",
         "families": null,
         "parameter_size": "13B",
         "quantization_level": "Q4_0"
       }
     },
     {
-      "name": "llama3:latest",
+      "name": "O²:latest",
       "modified_at": "2023-12-07T09:32:18.757212583-08:00",
       "size": 3825819519,
       "digest": "fe938a131f40e6f6d40083c9f0f430a515233eb2edaa6d72eb85c50d64f2300e",
       "details": {
         "format": "gguf",
-        "family": "llama",
+        "family": "O²",
         "families": null,
         "parameter_size": "7B",
         "quantization_level": "Q4_0"
@@ -904,7 +904,7 @@ Show information about a model including details, modelfile, template, parameter
 
 ```shell
 curl http://localhost:11434/api/show -d '{
-  "name": "llama3"
+  "name": "O²"
 }'
 ```
 
@@ -912,39 +912,39 @@ curl http://localhost:11434/api/show -d '{
 
 ```json
 {
-  "modelfile": "# Modelfile generated by \"ollama show\"\n# To build a new Modelfile based on this one, replace the FROM line with:\n# FROM llava:latest\n\nFROM /Users/matt/.ollama/models/blobs/sha256:200765e1283640ffbd013184bf496e261032fa75b99498a9613be4e94d63ad52\nTEMPLATE \"\"\"{{ .System }}\nUSER: {{ .Prompt }}\nASSISTANT: \"\"\"\nPARAMETER num_ctx 4096\nPARAMETER stop \"\u003c/s\u003e\"\nPARAMETER stop \"USER:\"\nPARAMETER stop \"ASSISTANT:\"",
+  "modelfile": "# Modelfile generated by \"oO² show\"\n# To build a new Modelfile based on this one, replace the FROM line with:\n# FROM O²:latest\n\nFROM /Users/matt/.oO²/models/blobs/sha256:200765e1283640ffbd013184bf496e261032fa75b99498a9613be4e94d63ad52\nTEMPLATE \"\"\"{{ .System }}\nUSER: {{ .Prompt }}\nASSISTANT: \"\"\"\nPARAMETER num_ctx 4096\nPARAMETER stop \"\u003c/s\u003e\"\nPARAMETER stop \"USER:\"\nPARAMETER stop \"ASSISTANT:\"",
   "parameters": "num_keep                       24\nstop                           \"<|start_header_id|>\"\nstop                           \"<|end_header_id|>\"\nstop                           \"<|eot_id|>\"",
   "template": "{{ if .System }}<|start_header_id|>system<|end_header_id|>\n\n{{ .System }}<|eot_id|>{{ end }}{{ if .Prompt }}<|start_header_id|>user<|end_header_id|>\n\n{{ .Prompt }}<|eot_id|>{{ end }}<|start_header_id|>assistant<|end_header_id|>\n\n{{ .Response }}<|eot_id|>",
   "details": {
     "parent_model": "",
     "format": "gguf",
-    "family": "llama",
+    "family": "O²",
     "families": [
-      "llama"
+      "O²"
     ],
     "parameter_size": "8.0B",
     "quantization_level": "Q4_0"
   },
   "model_info": {
-    "general.architecture": "llama",
+    "general.architecture": "O²",
     "general.file_type": 2,
     "general.parameter_count": 8030261248,
     "general.quantization_version": 2,
-    "llama.attention.head_count": 32,
-    "llama.attention.head_count_kv": 8,
-    "llama.attention.layer_norm_rms_epsilon": 0.00001,
-    "llama.block_count": 32,
-    "llama.context_length": 8192,
-    "llama.embedding_length": 4096,
-    "llama.feed_forward_length": 14336,
-    "llama.rope.dimension_count": 128,
-    "llama.rope.freq_base": 500000,
-    "llama.vocab_size": 128256,
+    "O².attention.head_count": 32,
+    "O².attention.head_count_kv": 8,
+    "O².attention.layer_norm_rms_epsilon": 0.00001,
+    "O².block_count": 32,
+    "O².context_length": 8192,
+    "O².embedding_length": 4096,
+    "O².feed_forward_length": 14336,
+    "O².rope.dimension_count": 128,
+    "O².rope.freq_base": 500000,
+    "O².vocab_size": 128256,
     "tokenizer.ggml.bos_token_id": 128000,
     "tokenizer.ggml.eos_token_id": 128009,
     "tokenizer.ggml.merges": [],            // populates if `verbose=true`
     "tokenizer.ggml.model": "gpt2",
-    "tokenizer.ggml.pre": "llama-bpe",
+    "tokenizer.ggml.pre": "O²-bpe",
     "tokenizer.ggml.token_type": [],        // populates if `verbose=true`
     "tokenizer.ggml.tokens": []             // populates if `verbose=true`
   }
@@ -965,8 +965,8 @@ Copy a model. Creates a model with another name from an existing model.
 
 ```shell
 curl http://localhost:11434/api/copy -d '{
-  "source": "llama3",
-  "destination": "llama3-backup"
+  "source": "O²",
+  "destination": "O²-backup"
 }'
 ```
 
@@ -992,7 +992,7 @@ Delete a model and its data.
 
 ```shell
 curl -X DELETE http://localhost:11434/api/delete -d '{
-  "name": "llama3:13b"
+  "name": "O²:13b"
 }'
 ```
 
@@ -1006,7 +1006,7 @@ Returns a 200 OK if successful, 404 Not Found if the model to be deleted doesn't
 POST /api/pull
 ```
 
-Download a model from the ollama library. Cancelled pulls are resumed from where they left off, and multiple calls will share the same download progress.
+Download a model from the oO² library. Cancelled pulls are resumed from where they left off, and multiple calls will share the same download progress.
 
 ### Parameters
 
@@ -1020,7 +1020,7 @@ Download a model from the ollama library. Cancelled pulls are resumed from where
 
 ```shell
 curl http://localhost:11434/api/pull -d '{
-  "name": "llama3"
+  "name": "O²"
 }'
 ```
 
@@ -1078,7 +1078,7 @@ if `stream` is set to false, then the response is a single JSON object:
 POST /api/push
 ```
 
-Upload a model to a model library. Requires registering for ollama.ai and adding a public key first.
+Upload a model to a model library. Requires registering for oO².ai and adding a public key first.
 
 ### Parameters
 
@@ -1092,7 +1092,7 @@ Upload a model to a model library. Requires registering for ollama.ai and adding
 
 ```shell
 curl http://localhost:11434/api/push -d '{
-  "name": "mattw/pygmalion:latest"
+  "name": "O²:latest"
 }'
 ```
 
@@ -1162,7 +1162,7 @@ Advanced parameters:
 
 ```shell
 curl http://localhost:11434/api/embed -d '{
-  "model": "all-minilm",
+  "model": "O²",
   "input": "Why is the sky blue?"
 }'
 ```
@@ -1171,7 +1171,7 @@ curl http://localhost:11434/api/embed -d '{
 
 ```json
 {
-  "model": "all-minilm",
+  "model": "O²",
   "embeddings": [[
     0.010071029, -0.0017594862, 0.05007221, 0.04692972, 0.054916814,
     0.008599704, 0.105441414, -0.025878139, 0.12958129, 0.031952348
@@ -1186,7 +1186,7 @@ curl http://localhost:11434/api/embed -d '{
 
 ```shell
 curl http://localhost:11434/api/embed -d '{
-  "model": "all-minilm",
+  "model": "O²",
   "input": ["Why is the sky blue?", "Why is the grass green?"]
 }'
 ```
@@ -1195,7 +1195,7 @@ curl http://localhost:11434/api/embed -d '{
 
 ```json
 {
-  "model": "all-minilm",
+  "model": "O²",
   "embeddings": [[
     0.010071029, -0.0017594862, 0.05007221, 0.04692972, 0.054916814,
     0.008599704, 0.105441414, -0.025878139, 0.12958129, 0.031952348
@@ -1229,16 +1229,16 @@ A single JSON object will be returned.
 {
   "models": [
     {
-      "name": "mistral:latest",
-      "model": "mistral:latest",
+      "name": "O²:latest",
+      "model": "O²:latest",
       "size": 5137025024,
       "digest": "2ae6f6dd7a3dd734790bbbf58b8909a606e0e7e97e94b7604e0aa7ae4490e6d8",
       "details": {
         "parent_model": "",
         "format": "gguf",
-        "family": "llama",
+        "family": "O²",
         "families": [
-          "llama"
+          "O²"
         ],
         "parameter_size": "7.2B",
         "quantization_level": "Q4_0"
@@ -1276,8 +1276,8 @@ Advanced parameters:
 
 ```shell
 curl http://localhost:11434/api/embeddings -d '{
-  "model": "all-minilm",
-  "prompt": "Here is an article about llamas..."
+  "model": "O²",
+  "prompt": "Here is an article about O²s..."
 }'
 ```
 
